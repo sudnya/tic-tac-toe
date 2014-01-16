@@ -1,3 +1,7 @@
+// Author: Sudnya Padalikar
+// Date  : Jan 15 2014
+// Brief : George AI player class, who plays randomly
+// Comment : None
 
 import java.util.Random;
 

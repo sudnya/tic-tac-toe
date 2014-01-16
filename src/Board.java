@@ -1,3 +1,8 @@
+// Author: Sudnya Padalikar
+// Date  : Jan 15 2014
+// Brief : This class stores the board
+// Comment : configurable dimensions?
+
 import java.util.Arrays;
 
 public class Board {
@@ -7,6 +12,7 @@ public class Board {
 	}
 	
 	Board(Board b) {
+		// copy over current with new board state
 		this.board = new char[3][3];
 
 		for (int i = 0; i < 3; ++i) {
@@ -25,14 +31,14 @@ public class Board {
 	}
 	
 	public void setPosition(char c, int x, int y) {
-		if(!isCharacterAllowed(c)) {
+		if (!isCharacterAllowed(c)) {
 			throw new IllegalArgumentException();
 		}
 		
-		if(!isLocationEmpty(x,y)) {
+		if (!isLocationEmpty(x,y)) {
 			throw new IllegalArgumentException();
 		}
-		
+		// note we use coordinate system with 0,0 at top left
 		board[y][x] = c;
 	}
 	
@@ -60,23 +66,21 @@ public class Board {
 		
 	public char getWinner() {
 		//check rows
-		for(int i = 0; i < 3; ++i)
-		{
-			if(board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != ' ') {
+		for (int i = 0; i < 3; ++i) {
+			if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != ' ') {
 				return board[i][0];
 			}
 		}
-		//check cols
-		for(int i = 0; i < 3; ++i)
-		{
-			if(board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != ' ') {
+		//check columns
+		for (int i = 0; i < 3; ++i) {
+			if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != ' ') {
 				return board[0][i];
 			}
 		}
 		//check diagonals
-		if(board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != ' ')
+		if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != ' ')
 			return board[0][0];
-		if(board[2][0] == board[1][1] && board[1][1] == board[0][2] && board[2][0] != ' ')
+		if (board[2][0] == board[1][1] && board[1][1] == board[0][2] && board[2][0] != ' ')
 			return board[2][0];
 		
 		return ' ';
@@ -90,19 +94,17 @@ public class Board {
 				}
 			}
 		}
-		
 		return getWinner() == ' ';
 	}
 	
 	public int getSubtreeSize() {
+		// we want to win as early as possible (bigger subtree)
 		int freeCells = countFreeCells();
-		
 		return factorial(freeCells);
 	}
 	
 	public int countFreeCells() {
 		int count = 0;
-		
 		for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 3; ++j) {
 				if (isLocationEmpty(i, j)) {
@@ -110,10 +112,10 @@ public class Board {
 				}
 			}
 		}
-		
 		return count;
 	}
 	
+	// TODO: There must be a library factorial function to use instead of this one!
 	static public int factorial(int n) {
         int fact = 1; // this  will be the result
         for (int i = 1; i <= n; i++) {

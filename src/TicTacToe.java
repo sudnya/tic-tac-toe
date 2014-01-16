@@ -1,3 +1,9 @@
+// Author: Sudnya Padalikar
+// Date  : Jan 15 2014
+// Brief : This is the main class that drives the game, it accepts user choices from a command line parser and calls
+//         the game engine with those options
+// Comment : I will need to figure out the coding style popular for java and clean this up accordingly
+
 
 import org.apache.commons.cli.CommandLine;  
 import org.apache.commons.cli.CommandLineParser;
@@ -12,30 +18,26 @@ public class TicTacToe {
 		   // create Options object
 		   Options options = new Options();
 
-		   // add t option
+		   // add option
+		   options.addOption("b", "begin", true, "Begin a new the game");
 		   options.addOption("s", "player-symbol", true, "The symbol for the player to use: X or O (X goes first).");
-		   options.addOption("t", "ai-type", true, "The artificial intelligence to use (Champ, George, or Toby)");
-		
+		   options.addOption("t", "ai-type", true, "The artificial intelligence to use (Champ (plays to win), Toby (play to tie/draw), or George (plays randomly)");
+		   // TODO:
+		   options.addOption("w", "winnable", false, "Quit the game");
+		   options.addOption("q", "quit", false, "Quit the game");
 		   CommandLineParser parser = new BasicParser();
-		   try 
-		   {
+		   try {
 			   CommandLine cmd = parser.parse(options, args);
 			   
 			   Engine engine = new Engine(cmd);
 			   engine.run();
-		   }
-		   catch (ParseException e)
-		   {
+		   } catch (ParseException e) {
 			    HelpFormatter helper = new HelpFormatter();
 			   
-			    helper.printHelp("TacTacToe [options]", options);
+			    helper.printHelp("TicTacToe [options]", options);
 			    
-			   // TODO Auto-generated catch block
 				e.printStackTrace();
-		   }
-		   catch (ClassNotFoundException e)
-		   {
-			// TODO Auto-generated catch block
+		   } catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		   }
 		   
