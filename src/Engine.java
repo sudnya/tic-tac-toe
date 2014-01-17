@@ -15,10 +15,18 @@ public class Engine {
 		this.board = new Board();
 		this.ui = new UserInput(this);
 		String symbol = cmd.getOptionValue("s", "X");
-		
-		if (symbol.equals("X")) {
+		String isQuit = cmd.getOptionValue("q", "quit");
+		//String isWin  = cmd.getOptionValue("w", "winnable");
+		if (isQuit.equalsIgnoreCase("q") || isQuit.equalsIgnoreCase("quit")) {
+			return;
+		}
+//		if (isWin.equalsIgnoreCase("w") || isWin.equalsIgnoreCase("winnable")) {
+//			println !this.board.isTied();
+//		}
+
+		if (symbol.equalsIgnoreCase("X")) {
 			this.playerSymbol = 'X';
-		} else if (symbol.equals("O")) {
+		} else if (symbol.equalsIgnoreCase("O")) {
 			this.playerSymbol = 'O';
 		} else {
 			throw new IllegalArgumentException("Illegal player symbol " + symbol + ", use 'X' or 'O'.");

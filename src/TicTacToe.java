@@ -1,6 +1,6 @@
 // Author: Sudnya Padalikar
 // Date  : Jan 15 2014
-// Brief : This is the main class that drives the game, it accepts user choices from a command line parser and calls
+// Brief : TicTacToe class that drives the game, it accepts user choices from a command line parser and calls
 //         the game engine with those options
 // Comment : I will need to figure out the coding style popular for java and clean this up accordingly
 
@@ -19,11 +19,12 @@ public class TicTacToe {
 		   Options options = new Options();
 
 		   // add option
+		   options.addOption("h", "help", true, "Help, show options");
 		   options.addOption("b", "begin", true, "Begin a new the game");
 		   options.addOption("s", "player-symbol", true, "The symbol for the player to use: X or O (X goes first).");
 		   options.addOption("t", "ai-type", true, "The artificial intelligence to use (Champ (plays to win), Toby (play to tie/draw), or George (plays randomly)");
 		   // TODO:
-		   options.addOption("w", "winnable", false, "Quit the game");
+		   options.addOption("w", "winnable", false, "Is winning possible?");
 		   options.addOption("q", "quit", false, "Quit the game");
 		   CommandLineParser parser = new BasicParser();
 		   try {
