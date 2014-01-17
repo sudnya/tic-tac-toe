@@ -8,14 +8,15 @@ This solution has a main TicTacToe class that starts the program. It creates a g
 The main components of the Engine are 
 (a.) User Input (text)
 (b.) AI Player (the computer to play against human) 
-(c.) The game Board. 
+(c.) The game Board.
+
 UserInput class:
 ----------------
     This class gets the user's input choices viz. 
-    whether user wants to quit
-    which location does the user want to move (sanitizes user input)
-    calls AI to play (depending on whether X or O)
-    updates the Board when move is legal.
+        whether user wants to quit
+        which location does the user want to move (sanitizes user input)
+        calls AI to play (depending on whether X or O)
+        updates the Board when move is legal.
 
 AI Player class:
 ----------------
