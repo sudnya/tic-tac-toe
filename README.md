@@ -25,7 +25,8 @@ AI Player class:
 The solution space for this problem is fairly small, so this code uses brute force method to explore the possible board configurations.
 For future improvements (we could have bigger tic tac toe board) in which case it would be useful to use dynamic programming to explore the solution space.
 
-
+Board class:
+    This class stores the game board and it's state,  
 # TODO:
 2. Working java code with instructions on how to run it.            
 Use the shell scripts in the bin/ folder to execute. 
@@ -41,4 +42,6 @@ The MiniMax approach in Game Theory seemed like an interesting algorithm to impl
 # TODO:
 
 6. Anything else you think would be valuable. 
+It would be neat to have a UI / mouse clickable version of this instead of a text based input.
+I haven't written Java in a long time, so please ignore the javaisms/syntax/formatting style I might have violated.
 

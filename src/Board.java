@@ -1,6 +1,6 @@
 // Author: Sudnya Padalikar
 // Date  : Jan 15 2014
-// Brief : This class stores the board
+// Brief : This class stores the board and it's state
 // Comment : configurable dimensions?
 
 import java.util.Arrays;
