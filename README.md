@@ -4,11 +4,11 @@ Artifacts to be returned:
  
 1. A short description of how you approached the problem including design tradeoffs and future improvements.  
 3. A description of the algorithm used including the strengths and weaknesses.
-This solution has a main TicTacToe class that starts the program. It creates a game Engine class which drives the game. 
-The main components of the Engine are 
-(a.) User Input (text)
-(b.) AI Player (the computer to play against human) 
-(c.) The game Board.
+
+    This solution has a main TicTacToe class that starts the program. It creates a game Engine class which drives the game. The main components of the Engine are 
+    (a) User Input (text)
+    (b) AI Player (the computer to play against human) 
+    (c) The game Board.
 
 UserInput class:
 ----------------
