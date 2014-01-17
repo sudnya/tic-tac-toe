@@ -159,7 +159,7 @@ public class UserInput {
         System.out.println(" ");
         System.out.println(" OR ");
         System.out.println(" ");
-        System.out.println("Please enter your next move.  A move should be of the form 'row,column'.");
+        System.out.println("Please enter your next move.  A move should be of the form 'x, y'.");
         System.out.println("For example, '0,0' will set the upper left box.");
 	}
 	
