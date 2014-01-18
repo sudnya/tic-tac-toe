@@ -1,9 +1,3 @@
-// Author: Sudnya Padalikar
-// Date  : Jan 15 2014
-// Brief : TicTacToe class that drives the game, it accepts user choices from a command line parser and calls
-//         the game engine with those options
-// Comment : I will need to figure out the coding style popular for java and clean this up accordingly
-
 package play;
 
 import org.apache.commons.cli.CommandLine;  
@@ -13,32 +7,85 @@ import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.HelpFormatter;
 
-import tictactoe.GenericEngine;
+import tictactoe.AIType;
+import tictactoe.GameEngine;
+import tictactoe.GameEngineFactory;
+import tictactoe.PlayerType;
 
 public class TicTacToe {
 	public static void main(String[] args) {
+
+		Options options = createCommandLineOptions();
 		
-		   // create Options object
-		   Options options = new Options();
+		try {
+			runGame(args, options);
+		} catch (Exception e) {
+			printHelpMessage(options);
+		}
+	}
+	
+	static void runGame(String[] args, Options options) throws ParseException {
+		GameEngine engine = createAndInitializeGameEngine(options, args);
+				
+		engine.run();
+	}
+	
+	static Options createCommandLineOptions() {
+		Options options = new Options();
 
-		   // add option
-		   options.addOption("h", "help", true, "Help, show options");
-		   options.addOption("s", "player-symbol", true, "The symbol for the player to use: X or O (X goes first).");
-		   options.addOption("a", "ai-type", true, "The artificial intelligence to use (Champ (plays to win), Toby (play to tie/draw), or George (plays randomly).");
+		options.addOption("h", "help", true, "Help, show options");
+		options.addOption("s", "player-symbol", true, 
+			"The symbol for the player to use: X or O (X goes first).");
+		options.addOption("a", "ai-type", true,
+			"The artificial intelligence to use (Champ (plays to win), Toby " +
+			" (play to tie/draw), or George (plays randomly).");
 
-		   CommandLineParser parser = new BasicParser();
-		   try {
-			   CommandLine cmd = parser.parse(options, args);
-			   GenericEngine engine = GenericEngine.create(cmd, "play");
-			   engine.run();
-		   } catch (ParseException e) {
-			    HelpFormatter helper = new HelpFormatter();
-			    helper.printHelp("TicTacToe [options]", options);
-				//e.printStackTrace();
-		   } catch (ClassNotFoundException e) {
-			   e.printStackTrace();
-		   }
-		   
-		 }
+		return options;
+	}
+	
+	static void printHelpMessage(Options options) {
+		HelpFormatter helper = new HelpFormatter();
+		helper.printHelp("TicTacToe [options]", options);
+	}
+	
+	static GameEngine createAndInitializeGameEngine(
+		Options options, String[] args) throws ParseException {
+		
+		CommandLineParser parser = new BasicParser();
+		CommandLine cmd = parser.parse(options, args);
+		
+		GameEngine engine = GameEngineFactory.createCommandLineGameEngine(
+			getPlayerType(cmd), getAIType(cmd));
+				
+		return engine;
+	}
+	
+	static PlayerType getPlayerType(CommandLine cmd) {
+		String s = cmd.getOptionValue("s", "X");
+		
+		if (s.equalsIgnoreCase("X")) {
+			return PlayerType.X;
+		} else if (s.equalsIgnoreCase("O")) {
+			return PlayerType.O;
+		} else {
+			throw new IllegalArgumentException();
+		}
 
+	}
+	
+	static AIType getAIType(CommandLine cmd) {
+		String s = cmd.getOptionValue("a", "Champ");
+		
+		if (s.equalsIgnoreCase("Champ")) {
+			return AIType.Champ;
+		} else if (s.equalsIgnoreCase("Toby")) {
+			return AIType.Toby;
+		} else if (s.equalsIgnoreCase("George")) {
+			return AIType.George;
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+	}
+	
 }

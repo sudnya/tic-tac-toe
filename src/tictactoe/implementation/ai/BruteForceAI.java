@@ -1,39 +1,34 @@
-package tictactoe;
+package tictactoe.implementation.ai;
 
-// Author: Sudnya Padalikar
-// Date  : Jan 15 2014
-// Brief : This is the AI player class, implements all functions except 
-//         the cost function that motivates each AI player (to win, to tie, random)
-// Comment : Optimize possible subtree without enumerating all
+import tictactoe.AIType;
+import tictactoe.PlayerType;
+import tictactoe.implementation.engine.Board;
+import tictactoe.implementation.engine.BoardGameEngine;
+import tictactoe.implementation.engine.Cell;
 
-public abstract class AI {
-	public static AI create(GenericEngine e, String s, char symbol) throws ClassNotFoundException {
-		if (s.equalsIgnoreCase("Champ"))
-			return new Champ(e, symbol);
-		if (s.equalsIgnoreCase( "Toby"))
-			return new Toby(e, symbol);
-		if (s.equalsIgnoreCase("George"))
-			return new George(e, symbol);
-		else {
-			throw new ClassNotFoundException();
-		}
-	}
+public abstract class BruteForceAI extends AI {
 	
-	AI(GenericEngine e, char symbol) {
-		this.engine = e;
-		this.aiSymbol = symbol;
+	/** The cost function determines how 'good' a finished board is for the AI */
+	public abstract double getBoardValueForAI(Board board);
+	
+	public BruteForceAI(BoardGameEngine engine, AIType aiType, PlayerType playerType) {
+		this.engine     = engine;
+		this.aiType     = aiType;
+		this.playerType = playerType;
 	}
 	
 	public void move() {
 		Board boardWithBestValue = getBoardWithBestValueForAI(engine.getBoard());
 		assert(boardWithBestValue != null);
+		
 		// update the board
 		engine.setBoard(boardWithBestValue);
 	}
 	
 	public Board getBoardWithBestValueForAI(Board currentBoard) {
 		// Enumerate possible moves
-		Board[] possibleMoves = enumeratePossibleMoves(currentBoard, aiSymbol);
+		Board[] possibleMoves = currentBoard.enumeratePossibleMoves(
+			Cell.convertPlayerToCell(getAIPlayerType()));
 		
 		// pick the move with the best value
 		Board bestMove = null;
@@ -71,7 +66,8 @@ public abstract class AI {
 	
 	public Board getBoardWithBestValueForPlayer(Board currentBoard) {
 		// Enumerate possible moves
-		Board[] possibleMoves = enumeratePossibleMoves(currentBoard, getPlayerSymbol());
+		Board[] possibleMoves = currentBoard.enumeratePossibleMoves(
+			Cell.convertPlayerToCell(getPlayerPlayerType()));
 		
 		// pick the move with the best value
 		Board bestMove = null;
@@ -107,8 +103,8 @@ public abstract class AI {
 		return computeMoveValueToPlayer(bestBoardForPlayer);
 	}
 	
-	public double getBoardValueForPlayer(Board board) {
-		if (board.getWinner() == getPlayerSymbol())
+	private double getBoardValueForPlayer(Board board) {
+		if (board.isThereAWinner() && board.getWinner() == getPlayerPlayerType())
 			return 2.0;
 		else if (board.isTied())
 			return 1.0;
@@ -116,53 +112,7 @@ public abstract class AI {
 		return 0.0;
 	}
 	
-	public Board[] enumeratePossibleMoves(Board board, char symbol) {
-		// Could place the symbol on any open space
-		Board[] moves = new Board[9];
-		int nextMove = 0;
-
-		for (int x = 0; x < 3; ++x) {
-			for (int y = 0; y < 3; ++y) {
-				if (board.isLocationEmpty(x, y)) {
-					Board newBoard = new Board(board);
-					newBoard.setPosition(symbol, x, y);
-					moves[nextMove++] = newBoard;
-				}
-			}
-		}
-		return moves;
+	private PlayerType getPlayerPlayerType() {
+		return PlayerType.invert(getAIPlayerType());
 	}
-	
-	public boolean canAnyPlayerWinThisBoard(Board b, char symbol) {
-		Board[] possibleMoves = enumeratePossibleMoves(b, symbol);
-		
-		for (int i = 0; i < possibleMoves.length; ++i) {
-			if (possibleMoves[i] == null)
-				continue;
-			
-			if (possibleMoves[i].getWinner() != ' ') {
-				return true;
-			}
-			
-			if (canAnyPlayerWinThisBoard(possibleMoves[i], engine.invertSymbol(symbol))) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	char getAISymbol() {
-		return aiSymbol;
-	}
-	
-	char getPlayerSymbol() {
-		return engine.invertSymbol(getAISymbol());
-	}
-	
-	// this will vary according to who the human player chooses to play against
-	public abstract double getBoardValueForAI(Board board);
-
-	protected GenericEngine engine;
-	protected char aiSymbol;
 }

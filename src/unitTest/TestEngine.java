@@ -1,59 +1,68 @@
 package unitTest;
 
-import org.apache.commons.cli.CommandLine;
+import tictactoe.AIType;
+import tictactoe.PlayerType;
+import tictactoe.implementation.ai.AI;
+import tictactoe.implementation.ai.AIFactory;
+import tictactoe.implementation.engine.BoardGameEngine;
 
-import tictactoe.AI;
-import tictactoe.GenericEngine;
+public class TestEngine extends BoardGameEngine {
+	public TestEngine(AIType player, AIType opponent, int iterations)  {
 
-public class TestEngine extends GenericEngine {
-		TestEngine(String player, String opponent, int iterations) throws ClassNotFoundException {
+		this.testIterations = iterations;
+		
+		this.playerAI   = AIFactory.createAI(this, player,   PlayerType.X);
+		this.opponentAI = AIFactory.createAI(this, opponent, PlayerType.O);
+	}
 
-			this.testIterations = iterations;
+	public void run() {
+		int playerWins  = 0;
+		int playerLoses = 0;
+		int playerTies  = 0;
+		
+		for (int i = 0; i < testIterations; ++i) {
+			restart();
 			
-			this.playerAI = AI.create(this, player, getPlayerSymbol());
-			this.ai = AI.create(this, opponent, getAISymbol());
-
-		}
-
-		public void run() {
-			int playerWins  = 0;
-			int playerLoses = 0;
-			int playerTies  = 0;
-			
-			for (int i = 0; i < testIterations; ++i) {
-				restart();
+			while(true)
+			{
+				playerAI.move();
 				
-				while(true)
-				{
-					playerAI.move();
-					
-					if (getBoard().gameOver())
-						break;
-					
-					ai.move();
-
-					if (getBoard().gameOver())
-						break;
+				if (getBoard().gameOver()) {
+					break;
 				}
 				
-				if (getBoard().getWinner() == getPlayerSymbol())
-					++playerWins;
-				else if (getBoard().getWinner() == getAISymbol())
-					++playerLoses;
-				else
-					++playerTies;
+				opponentAI.move();
+
+				if (getBoard().gameOver()) {
+					break;
+				}
 			}
 			
-			System.out.println(" wins:   " + playerWins);
-			System.out.println(" losses: " + playerLoses);
-			System.out.println(" ties:   " + playerTies);
+			if (getBoard().isThereAWinner() && getBoard().getWinner() == getPlayerAIType()) {
+				++playerWins;
+			} else if (getBoard().isThereAWinner() && getBoard().getWinner() == getOpponentAIType()) {
+				++playerLoses;
+			} else {
+				++playerTies;
+			}
 		}
 		
-		public char getAISymbol() {
-			return 'O';
-		}
-		
-		private AI playerAI;
-		private int testIterations;
+		System.out.println(" wins:   " + playerWins );
+		System.out.println(" losses: " + playerLoses);
+		System.out.println(" ties:   " + playerTies );
+	}
+	
+	public PlayerType getPlayerAIType() {
+		return playerAI.getAIPlayerType();
+	}
+	
+	public PlayerType getOpponentAIType() {
+		return opponentAI.getAIPlayerType();
+	}
+	
+	private AI playerAI;
+	private AI opponentAI;
+	
+	private int testIterations;
 
 }

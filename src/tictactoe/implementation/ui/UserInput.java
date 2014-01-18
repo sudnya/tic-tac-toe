@@ -1,22 +1,30 @@
-package tictactoe;
 // Author: Sudnya Padalikar
 // Date  : Jan 15 2014
 // Brief : User input class that handles the user input during the game
 // Comment : support small x,o and have a way to convert them to capital letters
 
-import java.io.*;
+package tictactoe.implementation.ui;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import tictactoe.PlayerType;
+import tictactoe.implementation.ai.AI;
+import tictactoe.implementation.engine.BoardGameEngine;
 
 public class UserInput {
-	UserInput(Engine e, char symbol) {
-		// keep a pointer to the engine
-		this.engine = e;
-		this.playerSymbol = symbol;
+	public UserInput(BoardGameEngine e, PlayerType playerType, AI ai) {
+
+		this.engine     = e;
+		this.playerType = playerType;
+		this.ai         = ai;
 	}
 	
 	public void run() {
 		// when human player chooses 'O'
 		if (aiMovesFirst()) {
-			engine.getAI().move();
+			ai.move();
 		}
 
 		while (true) {
@@ -46,7 +54,7 @@ public class UserInput {
 					if (!checkBoard())
 						break;
 
-					engine.getAI().move();
+					ai.move();
 				}
 			} else {
 				printHelpMessage();
@@ -65,7 +73,7 @@ public class UserInput {
 			if (engine.getBoard().isTied()) {
 				System.out.println("An even match!");
 			}
-			else if (engine.getBoard().getWinner() == playerSymbol) {
+			else if (engine.getBoard().getWinner() == playerType) {
 				System.out.println("You win!");
 			}
 			else {
@@ -81,7 +89,7 @@ public class UserInput {
 		// only if human player chooses 'O' since
 		// http://en.wikipedia.org/wiki/Tic_tac_toe#Number_of_terminal_positions 
 		// says that X starts
-		return playerSymbol == 'O';
+		return playerType == PlayerType.O;
 	}
 	
 	private String getUserInput() {
@@ -112,24 +120,29 @@ public class UserInput {
 	}
 
 	private boolean isRestart(String input) {
-		if (input.trim().equalsIgnoreCase("restart") || input.trim().equalsIgnoreCase("r"))
+		if (input.trim().equalsIgnoreCase("restart") || input.trim().equalsIgnoreCase("r")) {
 			return true;
-		return false;
+		} else {
+			return false;
+		}
 	}
 	
 	private void isWinnable() {
 		// iterate over all possibilities and check if not tie
-		if (engine.getAI().canAnyPlayerWinThisBoard(engine.getBoard(), playerSymbol))
+		if (engine.getBoard().canAnyPlayerWin(playerType)) {
 			System.out.println("It is still possible for this game to be won (and not a tie)");
-		else
+		} else {
 			System.out.println("Neither player can win this game, a tie is inevitable.");
+		}
 	}
 	private boolean validateInput(String input) {
-		if (!input.contains(","))
+		if (!input.contains(",")) {
 			return false;
+		}
 
-		if (input.split(",").length != 2)
+		if (input.split(",").length != 2) {
 			return false;
+		}
 
 		return true;
 	}
@@ -147,7 +160,8 @@ public class UserInput {
 			return false;
 		}
 
-		engine.getBoard().setPosition(playerSymbol, x, y);		
+		engine.getBoard().setPosition(playerType, x, y);	
+		
 		return true;
 	}
 	
@@ -162,12 +176,8 @@ public class UserInput {
         System.out.println("Please enter your next move.  A move should be of the form 'x, y'.");
         System.out.println("For example, '0,0' will set the upper left box.");
 	}
-	
-	public char getPlayerSymbol() {
-		return this.playerSymbol;
-	}
-	
-	
-	private Engine engine;
-	private char playerSymbol;
+		
+	private BoardGameEngine engine;
+	private PlayerType      playerType;
+	private AI              ai;
 }
