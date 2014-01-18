@@ -1,7 +1,3 @@
-// Author: Sudnya Padalikar
-// Date  : Jan 15 2014
-// Brief : User input class that handles the user input during the game
-// Comment : support small x,o and have a way to convert them to capital letters
 
 package tictactoe.implementation.ui;
 
