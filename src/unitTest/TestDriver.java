@@ -1,7 +1,3 @@
-// Author: Sudnya Padalikar
-// Date  : Jan 15 2014
-// Brief : The test class which pits AI playes to play against each other
-
 package unitTest;
 
 import tictactoe.AIType;
