@@ -6,6 +6,7 @@ package unitTest;
 
 import tictactoe.AIType;
 import tictactoe.GameEngine;
+import tictactoe.GameEngineFactory;
 
 import org.apache.commons.cli.CommandLine;  
 import org.apache.commons.cli.CommandLineParser;
@@ -27,7 +28,7 @@ public class TestDriver {
 		}
 	}
 	
-	static void runTest(Options options, String[] args) throws ParseException {
+	static private void runTest(Options options, String[] args) throws ParseException {
 		
 		int iterations = getIterationCount(options, args);
 		
@@ -38,15 +39,38 @@ public class TestDriver {
 				
 				System.out.println("Playing " + aiTypes[player] +
 					" (X) against " + aiTypes[opponent] + " (O)");
+				
+				int wins   = 0;
+				int losses = 0;
+				int ties   = 0;
+				
+				for (int i = 0; i < iterations; ++i) {
+					GameEngine engine = GameEngineFactory.createGameEngine(aiTypes[player], aiTypes[opponent]);
+					
+					switch(engine.run()) {
+						case PlayerWins: {
+							++wins;
+							break;
+						} case PlayerLoses: {
+							++losses;
+							break;
+						} case Tie: {
+							++ties;
+							break;
+						} default:
+					}
+				}
+				
+				System.out.println(" wins:   " + wins  );
+				System.out.println(" losses: " + losses);
+				System.out.println(" ties:   " + ties  );
 
-				GameEngine engine = new TestEngine(aiTypes[player], aiTypes[opponent], iterations);
-				engine.run();
 			}
 		}
 		
 	}
 	
-	static Options createCommandLineOptions() {
+	static private Options createCommandLineOptions() {
 		Options options = new Options();
 		
 		options.addOption("h", "help", true, "Help, show options");
@@ -56,12 +80,12 @@ public class TestDriver {
 		return options;
 	}
 	
-	static void printHelpMessage(Options options) {
+	static private void printHelpMessage(Options options) {
 		HelpFormatter helper = new HelpFormatter();
 		helper.printHelp("TestTicTacToe [options]", options);
 	}
 	
-	static int getIterationCount(
+	static private int getIterationCount(
 		Options options, String[] args) throws ParseException {
 		
 		CommandLineParser parser = new BasicParser();

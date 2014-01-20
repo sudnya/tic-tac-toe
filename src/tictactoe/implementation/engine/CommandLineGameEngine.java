@@ -1,6 +1,7 @@
 package tictactoe.implementation.engine;
 
 import tictactoe.AIType;
+import tictactoe.GameResult;
 import tictactoe.PlayerType;
 import tictactoe.implementation.ai.AI;
 import tictactoe.implementation.ai.AIFactory;
@@ -14,8 +15,8 @@ public class CommandLineGameEngine extends BoardGameEngine {
 		this.ui = new UserInput(this, playerType, this.ai);
 	}
 	
-	public void run() {
-		ui.run();
+	public GameResult run() {
+		return ui.run();
 	}
 
 	// member variables

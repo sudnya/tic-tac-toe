@@ -1,14 +1,10 @@
-// Author: Sudnya Padalikar
-// Date  : Jan 15 2014
-// Brief : User input class that handles the user input during the game
-// Comment : support small x,o and have a way to convert them to capital letters
-
 package tictactoe.implementation.ui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import tictactoe.GameResult;
 import tictactoe.PlayerType;
 import tictactoe.implementation.ai.AI;
 import tictactoe.implementation.engine.BoardGameEngine;
@@ -21,7 +17,7 @@ public class UserInput {
 		this.ai         = ai;
 	}
 	
-	public void run() {
+	public GameResult run() {
 		// when human player chooses 'O'
 		if (aiMovesFirst()) {
 			ai.move();
@@ -62,6 +58,8 @@ public class UserInput {
 
 			engine.getBoard().print();
 		}
+		
+		return getGameResult();
 	}
 	
 	private boolean checkBoard() {
@@ -70,19 +68,35 @@ public class UserInput {
 
 			engine.getBoard().print();
 			
-			if (engine.getBoard().isTied()) {
-				System.out.println("An even match!");
+			switch (getGameResult()) {
+				case PlayerWins: {
+					System.out.println("You win!");
+					break;
+				} case PlayerLoses: {
+					System.out.println("You lose!");
+					break;
+				} case Tie: {
+					System.out.println("An even match!");
+					break;
+				} default:
 			}
-			else if (engine.getBoard().getWinner() == playerType) {
-				System.out.println("You win!");
-			}
-			else {
-				System.out.println("You lose!");
-			}
+
 			return false;
 		}
 		// continue playing
 		return true;
+	}
+	
+	private GameResult getGameResult() {
+		assert(engine.getBoard().gameOver());
+		
+		if (engine.getBoard().isTied()) {
+			return GameResult.Tie;
+		} else if (engine.getBoard().getWinner() == playerType) {
+			return GameResult.PlayerWins;
+		} else {
+			return GameResult.PlayerLoses;
+		}
 	}
 	
 	private boolean aiMovesFirst() {

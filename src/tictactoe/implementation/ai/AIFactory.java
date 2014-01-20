@@ -15,4 +15,5 @@ public class AIFactory {
 			return new George(engine, aiType, playerType);
 		}
 	}
+
 }

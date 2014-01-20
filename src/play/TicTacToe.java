@@ -24,13 +24,13 @@ public class TicTacToe {
 		}
 	}
 	
-	static void runGame(String[] args, Options options) throws ParseException {
+	static private void runGame(String[] args, Options options) throws ParseException {
 		GameEngine engine = createAndInitializeGameEngine(options, args);
 				
 		engine.run();
 	}
 	
-	static Options createCommandLineOptions() {
+	static private Options createCommandLineOptions() {
 		Options options = new Options();
 
 		options.addOption("h", "help", true, "Help, show options");
@@ -43,24 +43,24 @@ public class TicTacToe {
 		return options;
 	}
 	
-	static void printHelpMessage(Options options) {
+	static private void printHelpMessage(Options options) {
 		HelpFormatter helper = new HelpFormatter();
 		helper.printHelp("TicTacToe [options]", options);
 	}
 	
-	static GameEngine createAndInitializeGameEngine(
+	static private GameEngine createAndInitializeGameEngine(
 		Options options, String[] args) throws ParseException {
 		
 		CommandLineParser parser = new BasicParser();
 		CommandLine cmd = parser.parse(options, args);
 		
-		GameEngine engine = GameEngineFactory.createCommandLineGameEngine(
+		GameEngine engine = GameEngineFactory.createGameEngine(
 			getPlayerType(cmd), getAIType(cmd));
 				
 		return engine;
 	}
 	
-	static PlayerType getPlayerType(CommandLine cmd) {
+	static private PlayerType getPlayerType(CommandLine cmd) {
 		String s = cmd.getOptionValue("s", "X");
 		
 		if (s.equalsIgnoreCase("X")) {
@@ -73,7 +73,7 @@ public class TicTacToe {
 
 	}
 	
-	static AIType getAIType(CommandLine cmd) {
+	static private AIType getAIType(CommandLine cmd) {
 		String s = cmd.getOptionValue("a", "Champ");
 		
 		if (s.equalsIgnoreCase("Champ")) {
